@@ -1,17 +1,18 @@
-package com.poolit.controller;
+package com.poolit.managers;
 
 import java.io.IOException;
+
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+
 import java.sql.*;
-import java.sql.Date;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 
 
-public class register extends HttpServlet {
+public class RegisterLogin extends HttpServlet {
 	private static final long serialVersionUID = 1L;
      private String email=null;
      private String pwd=null;
@@ -23,13 +24,13 @@ public class register extends HttpServlet {
 
      //  Database credentials
      static final String USER = "root";
-     static final String PASS = "thub";
+     static final String PASS = "root";
      
      
     /**
      * @see HttpServlet#HttpServlet()
      */
-    public register() {
+    public RegisterLogin() {
         super();
         // TODO Auto-generated constructor stub
     }
@@ -49,16 +50,16 @@ public class register extends HttpServlet {
 		// TODO Auto-generated method stub
 		Connection conn = null;
 		PreparedStatement pstmt = null;
-		   java.util.Date DOBJavaDate = null;
-		   DateFormat formatter1 = new SimpleDateFormat("DD-mm-yyyy");
-		   System.out.println();
-		   try{
-		      //STEP 2: Register JDBC driver
-		      Class.forName("com.mysql.jdbc.Driver");
+	   java.util.Date DOBJavaDate = null;
+	   DateFormat formatter1 = new SimpleDateFormat("DD-mm-yyyy");
+	   System.out.println("In POST block");
+	   try{
+	      //STEP 2: Register JDBC driver
+	      Class.forName("com.mysql.jdbc.Driver");
 
-		      //STEP 3: Open a connection
-		      System.out.println("Connecting to database...");
-		      conn = DriverManager.getConnection(DB_URL,USER,PASS);
+	      //STEP 3: Open a connection
+	      System.out.println("Connecting to database...");
+	      conn = DriverManager.getConnection(DB_URL,USER,PASS);
 
 		
 		email=request.getParameter("e-mail");
@@ -71,22 +72,17 @@ public class register extends HttpServlet {
 		
 		
 		try {
-		   String SQL = "insert into user(email,password,dob,mobile_no,gender,is_poolit_user) values(?,?,?,?,?,?)";
+			
+		   String SQL = "insert into user(email,password,dob,mobile_no,gender,is_poolit_user,created_time) values(?,?,?,?,?,?,?)";
 		   pstmt = conn.prepareStatement(SQL);
-/*		   pstmt.setString(1,email);
+		   pstmt.setString(1,email);
 		   pstmt.setString(2,pwd);
 		   pstmt.setDate(3,new java.sql.Date(DOBJavaDate.getTime()));
 		   pstmt.setString(4,mobileno);
 		   pstmt.setString(5,gender);
 		   pstmt.setBoolean(6,true);
-		  */
-		   pstmt.setString(1,"myemail@xty.com");
-		   pstmt.setString(2,"dsgfd");
-		   pstmt.setDate(3,new java.sql.Date(new java.util.Date().getTime()));
-		   pstmt.setString(4,"123456789");
-		   pstmt.setString(5,"male");
-		   pstmt.setBoolean(6, true);
-		   
+		   pstmt.setTimestamp(7,new java.sql.Timestamp(System.currentTimeMillis()));
+
 		 int i= pstmt.executeUpdate();
 		 System.out.println(i+" records inserted");
 		 
@@ -113,6 +109,7 @@ public class register extends HttpServlet {
 	            pstmt.close();
 	      }catch(SQLException se2){
 	    	  System.out.println("in exception 4");
+	    	  se2.printStackTrace();
 	      }
 	      try{
 	         if(conn!=null)

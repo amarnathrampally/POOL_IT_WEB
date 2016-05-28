@@ -9,7 +9,7 @@
 <description>register</description>
 <display-name>register</display-name>
 <servlet-name>register</servlet-name>
-<servlet-class>com.poolit.controller.register</servlet-class>
+<servlet-class>com.poolit.managers.RegisterLogin</servlet-class>
 </servlet>
 <servlet-mapping>
 <servlet-name>register</servlet-name>
